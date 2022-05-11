@@ -15,10 +15,10 @@ jobs:
     name: boilerplate
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           path: logicalcluster
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: kubernetes/repo-infra
           ref: master
@@ -32,14 +32,14 @@ jobs:
     name: verify-imports
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - run: hack/reject-k8s-imports.sh
 
   lint:
     name: lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: actions/setup-go@v3
         with:
           go-version: v1.17
@@ -50,7 +50,7 @@ jobs:
     name: test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: actions/setup-go@v3
         with:
           go-version: v1.17
