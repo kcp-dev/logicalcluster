@@ -36,6 +36,7 @@ type Name struct {
 }
 
 const separator = ":"
+const LogicalClusterAnnotationKey = "tenancy.kcp.dev/cluster"
 
 var (
 	// Wildcard is the name indicating cross-workspace requests.
@@ -65,12 +66,20 @@ func (n Name) String() string {
 // Object is a local interface representation of the Kubernetes metav1.Object, to avoid dependencies on
 // k8s.io/apimachinery.
 type Object interface {
-	GetClusterName() string
+	GetAnnotations() map[string]string
+	SetAnnotations(annotations map[string]string)
 }
 
 // From returns the logical cluster name for obj.
 func From(obj Object) Name {
-	return Name{obj.GetClusterName()}
+	//TODO: Do we want some sort of error in this library when this is not found?
+	return Name{obj.GetAnnotations()[LogicalClusterAnnotationKey]}
+}
+
+func (n Name) Set(obj Object) {
+	annotations := obj.GetAnnotations()
+	annotations[LogicalClusterAnnotationKey] = n.value
+	obj.SetAnnotations(annotations)
 }
 
 // Parent returns the parent logical cluster name of the given logical cluster name.

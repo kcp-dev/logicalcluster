@@ -68,3 +68,48 @@ func TestJSON(t *testing.T) {
 	require.NoError(t, err)
 	require.Equal(t, jwt, jwt2)
 }
+
+type testObject struct {
+	annotations map[string]string
+}
+
+func (t *testObject) GetAnnotations() map[string]string {
+	return t.annotations
+}
+
+func (t *testObject) SetAnnotations(a map[string]string) {
+	t.annotations = a
+}
+
+func TestSet(t *testing.T) {
+
+	testCases := []struct {
+		name          string
+		LogicaCluster Name
+		Object        *testObject
+	}{
+		{
+			name:          "Set cluster if not set",
+			LogicaCluster: Name{value: "root:org:ws-1"},
+			Object: &testObject{
+				annotations: map[string]string{},
+			},
+		},
+		{
+			name:          "overwrite cluster if set",
+			LogicaCluster: Name{value: "root:org:ws-1"},
+			Object: &testObject{
+				annotations: map[string]string{
+					LogicalClusterAnnotationKey: "root:org:ws-2",
+				},
+			},
+		},
+	}
+
+	for _, tt := range testCases {
+		t.Run(tt.name, func(t *testing.T) {
+			tt.LogicaCluster.Set(tt.Object)
+			require.Equal(t, tt.LogicaCluster.value, tt.Object.annotations[LogicalClusterAnnotationKey])
+		})
+	}
+}
