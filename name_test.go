@@ -68,3 +68,45 @@ func TestJSON(t *testing.T) {
 	require.NoError(t, err)
 	require.Equal(t, jwt, jwt2)
 }
+
+func TestIsValidCluster(t *testing.T) {
+	tests := []struct {
+		name  string
+		valid bool
+	}{
+		{"", false},
+		{"*", true},
+
+		{"elephant", true},
+		{"elephant:foo", true},
+		{"elephant:foo:bar", true},
+
+		{"system", true},
+		{"system:foo", true},
+		{"system:foo:bar", true},
+
+		// the plugin does not decide about segment length, the server does
+		{"elephant:b1234567890123456789012345678912", true},
+		{"elephant:test-8827a131-f796-4473-8904-a0fa527696eb:b1234567890123456789012345678912", true},
+		{"elephant:test-too-long-org-0020-4473-0030-a0fa-0040-5276-0050-sdg2-0060:b1234567890123456789012345678912", true},
+
+		{"elephant:", false},
+		{":elephant", false},
+		{"elephant::foo", false},
+		{"elephant:föö:bär", false},
+		{"elephant:bar_bar", false},
+		{"elephant:a", false},
+		{"elephant:0a", false},
+		{"elephant:0bar", false},
+		{"elephant/bar", false},
+		{"elephant:bar-", false},
+		{"elephant:-bar", false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := New(tt.name).IsValid(); got != tt.valid {
+				t.Errorf("isValid(%q) = %v, want %v", tt.name, got, tt.valid)
+			}
+		})
+	}
+}
