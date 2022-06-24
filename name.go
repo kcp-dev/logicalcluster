@@ -23,6 +23,12 @@ import (
 	"strings"
 )
 
+
+// ClusterHeader set to "<lcluster>" on a request is an alternative to accessing the
+// cluster via /clusters/<lcluster>. With that the <lcluster> can be access via normal kube-like
+// /api and /apis endpoints.
+const ClusterHeader = "X-Kubernetes-Cluster"
+
 // Name is the name of a logical cluster. A logical cluster is
 // 1. a (part of) etcd prefix to store objects in that cluster
 // 2. a (part of) a http path which serves a Kubernetes-cluster-like API with
