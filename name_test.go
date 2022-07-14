@@ -19,8 +19,6 @@ package logicalcluster
 import (
 	"encoding/json"
 	"testing"
-
-	"github.com/stretchr/testify/require"
 )
 
 func TestName_Split(t *testing.T) {
@@ -49,24 +47,29 @@ func TestName_Split(t *testing.T) {
 }
 
 func TestJSON(t *testing.T) {
-	type JWT struct {
-		I  int  `json:"i"`
-		CN Name `json:"cn"`
+	type container struct {
+		Name Name `json:"name"`
 	}
 
-	jwt := JWT{
-		I:  1,
-		CN: New("foo:bar"),
+	initial := container{
+		Name: New("foo:bar"),
 	}
 
-	bs, err := json.Marshal(jwt)
-	require.NoError(t, err)
-	require.Equal(t, `{"i":1,"cn":"foo:bar"}`, string(bs))
+	raw, err := json.Marshal(initial)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if actual, expected := string(raw), `{"name":"foo:bar"}`; actual != expected {
+		t.Fatalf("incorrect marshalled bytes, expected %s, got %s", expected, actual)
+	}
 
-	var jwt2 JWT
-	err = json.Unmarshal(bs, &jwt2)
-	require.NoError(t, err)
-	require.Equal(t, jwt, jwt2)
+	var final container
+	if err := json.Unmarshal(raw, &final); err != nil {
+		t.Fatal(err)
+	}
+	if actual, expected := initial.Name, final.Name; actual != expected {
+		t.Fatalf("incorrect unmarshalled name, expected %s, got %s", expected, actual)
+	}
 }
 
 func TestIsValidCluster(t *testing.T) {
