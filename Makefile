@@ -35,6 +35,10 @@ $(TOOLS_DIR)/verify_boilerplate.py:
 verify-boilerplate: $(TOOLS_DIR)/verify_boilerplate.py
 	$(TOOLS_DIR)/verify_boilerplate.py --boilerplate-dir=hack/boilerplate
 
+.PHONY: verify-imports
+verify-imports:
+	hack/reject-k8s-imports.sh
+
 .PHONY: lint
 lint: $(GOLANGCI_LINT)
 	$(GOLANGCI_LINT) run --timeout=10m ./...
