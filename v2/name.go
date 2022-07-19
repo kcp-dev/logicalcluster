@@ -79,11 +79,18 @@ func (n Name) String() string {
 // k8s.io/apimachinery.
 type Object interface {
 	GetZZZ_DeprecatedClusterName() string
+	SetZZZ_DeprecatedClusterName(string)
 }
 
 // From returns the logical cluster name for obj.
 func From(obj Object) Name {
 	return Name{obj.GetZZZ_DeprecatedClusterName()}
+}
+
+// To marks the object as contained in the logical cluster.
+func To(obj Object, name Name) Object {
+	obj.SetZZZ_DeprecatedClusterName(name.String())
+	return obj
 }
 
 // Parent returns the parent logical cluster name of the given logical cluster name.
