@@ -98,7 +98,6 @@ func TestIsValidCluster(t *testing.T) {
 		{"elephant::foo", false},
 		{"elephant:föö:bär", false},
 		{"elephant:bar_bar", false},
-		{"elephant:a", false},
 		{"elephant:0a", false},
 		{"elephant:0bar", false},
 		{"elephant/bar", false},
