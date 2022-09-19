@@ -23,7 +23,6 @@ import (
 	"strings"
 )
 
-
 // ClusterHeader set to "<lcluster>" on a request is an alternative to accessing the
 // cluster via /clusters/<lcluster>. With that the <lcluster> can be access via normal kube-like
 // /api and /apis endpoints.
@@ -136,7 +135,9 @@ func (n Name) HasPrefix(other Name) bool {
 	return strings.HasPrefix(n.value, other.value)
 }
 
-var lclusterRegExp = regexp.MustCompile(`^[a-z][a-z0-9-]*[a-z0-9](:[a-z][a-z0-9-]*[a-z0-9])*$`)
+const lclusterNameFmt string = "[a-z]([a-z0-9-]{0,61}[a-z0-9])?"
+
+var lclusterRegExp = regexp.MustCompile("^" + lclusterNameFmt + "(:" + lclusterNameFmt + ")*$")
 
 // IsValid returns true if the name is a Wildcard or a colon separated list of words where each word
 // starts with a lower-case letter and contains only lower-case letters, digits and hyphens.
