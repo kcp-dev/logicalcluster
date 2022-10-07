@@ -46,6 +46,12 @@ const separator = ":"
 var (
 	// Wildcard is the name indicating cross-workspace requests.
 	Wildcard = New("*")
+
+	// None is the name indicating a cluster-unaware context.
+	None = New("")
+
+	// TODO is a value created by automated refactoring tools that should be replaced by a real Name.
+	TODO = None
 )
 
 // New returns a Name from a string.
