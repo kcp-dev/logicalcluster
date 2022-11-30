@@ -144,7 +144,7 @@ func (n Name) HasPrefix(other Name) bool {
 	return strings.HasPrefix(n.value, other.value)
 }
 
-const lclusterNameFmt string = "[a-z]([a-z0-9-]{0,61}[a-z0-9])?"
+const lclusterNameFmt string = "[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?"
 
 var lclusterRegExp = regexp.MustCompile("^" + lclusterNameFmt + "(:" + lclusterNameFmt + ")*$")
 

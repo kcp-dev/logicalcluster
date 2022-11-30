@@ -87,6 +87,8 @@ func TestIsValidCluster(t *testing.T) {
 		{"system", true},
 		{"system:foo", true},
 		{"system:foo:bar", true},
+		{"elephant:0a", true},
+		{"elephant:0bar", true},
 
 		// the plugin does not decide about segment length, the server does
 		{"elephant:b1234567890123456789012345678912", true},
@@ -98,8 +100,6 @@ func TestIsValidCluster(t *testing.T) {
 		{"elephant::foo", false},
 		{"elephant:föö:bär", false},
 		{"elephant:bar_bar", false},
-		{"elephant:0a", false},
-		{"elephant:0bar", false},
 		{"elephant/bar", false},
 		{"elephant:bar-", false},
 		{"elephant:-bar", false},
