@@ -162,6 +162,11 @@ func (p Path) HasPrefix(other Path) bool {
 	return strings.HasPrefix(p.value, other.value)
 }
 
+// Equal checks if the path is the same as the other path.
+func (p Path) Equal(other Path) bool {
+	return p.value == other.value
+}
+
 const lclusterNameFmt string = "[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?"
 
 var lclusterRegExp = regexp.MustCompile("^" + lclusterNameFmt + "(:" + lclusterNameFmt + ")*$")
