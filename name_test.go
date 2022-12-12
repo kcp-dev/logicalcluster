@@ -31,10 +31,11 @@ func TestIsValidName(t *testing.T) {
 		{"elephant:foo:bar", false},
 
 		{"system", true},
-		{"system:foo", false},
+		{"system:foo", true},
 		{"system-foo", true},
-		{"system:foo:bar", false},
+		{"system:foo:bar", true},
 		{"system-foo-bar", true},
+
 		{"elephant:0a", false},
 		{"elephant-0a", true},
 		{"elephant:0bar", false},

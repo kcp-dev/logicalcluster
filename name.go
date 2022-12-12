@@ -16,7 +16,10 @@ limitations under the License.
 
 package logicalcluster
 
-import "regexp"
+import (
+	"regexp"
+	"strings"
+)
 
 var (
 	clusterNameRegExp = regexp.MustCompile(clusterNameString)
@@ -50,7 +53,7 @@ func (n Name) String() string {
 // As of today a valid value starts with a lower-case letter or digit
 // and contains only lower-case letters, digits and hyphens.
 func (n Name) IsValid() bool {
-	return clusterNameRegExp.MatchString(string(n))
+	return strings.HasPrefix(string(n), "system:") || clusterNameRegExp.MatchString(string(n))
 }
 
 // Empty returns true if the logical cluster name is unset.

@@ -61,10 +61,10 @@ func TestIsValidPath(t *testing.T) {
 		{"system", true},
 		{"system:foo", true},
 		{"system:foo:bar", true},
+
 		{"elephant:0a", true},
 		{"elephant:0bar", true},
 
-		// the plugin does not decide about segment length, the server does
 		{"elephant:b1234567890123456789012345678912", true},
 		{"elephant:test-8827a131-f796-4473-8904-a0fa527696eb:b1234567890123456789012345678912", true},
 		{"elephant:test-too-long-org-0020-4473-0030-a0fa-0040-5276-0050-sdg2-0060:b1234567890123456789012345678912", true},
@@ -110,5 +110,28 @@ func TestJSON(t *testing.T) {
 	}
 	if actual, expected := initial.ClusterPath, final.ClusterPath; actual != expected {
 		t.Fatalf("incorrect unmarshalled name, expected %s, got %s", expected, actual)
+	}
+}
+
+func TestPath_Name(t *testing.T) {
+	tests := []struct {
+		path             Path
+		expectedName     Name
+		expectToFindName bool
+	}{
+		{NewPath("elephant:b1234567890123456789012345678912"), Name(""), false},
+		{NewPath("elephant"), Name("elephant"), true},
+		{NewPath("system:crds"), Name("system:crds"), true},
+	}
+	for _, tt := range tests {
+		t.Run(tt.path.String(), func(t *testing.T) {
+			gotName, hasName := tt.path.Name()
+			if hasName != tt.expectToFindName {
+				t.Fatalf("path = %s, hasName = %v, expected to find a name = %v", tt.path, hasName, tt.expectToFindName)
+			}
+			if gotName != tt.expectedName {
+				t.Fatalf("Name() gotName = %v, want %v", gotName, tt.expectedName)
+			}
+		})
 	}
 }

@@ -84,6 +84,9 @@ func (p Path) Empty() bool {
 // Name return a new Name object from the stored path and whether it can be created.
 // A convenience method for working with methods which accept a Name type.
 func (p Path) Name() (Name, bool) {
+	if strings.HasPrefix(p.value, "system:") {
+		return Name(p.value), true
+	}
 	if _, hasParent := p.Parent(); hasParent {
 		return "", false
 	}
