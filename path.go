@@ -115,6 +115,9 @@ func (p Path) Parent() (Path, bool) {
 // If there is no colon in the path,
 // Split returns an empty path and a name set to the path.
 func (p Path) Split() (parent Path, name string) {
+	if strings.HasPrefix(p.value, "system:") {
+		return Path{p.value}, ""
+	}
 	i := strings.LastIndex(p.value, separator)
 	if i < 0 {
 		return Path{}, p.value
