@@ -32,6 +32,8 @@ func TestPath_Split(t *testing.T) {
 		{NewPath("foo:bar"), NewPath("foo"), "bar"},
 		{NewPath("foo:bar:baz"), NewPath("foo:bar"), "baz"},
 		{NewPath("foo::baz"), NewPath("foo:"), "baz"},
+
+		{NewPath("system:crds"), NewPath("system:crds"), ""},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

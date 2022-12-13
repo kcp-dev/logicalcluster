@@ -115,6 +115,9 @@ func (p Path) Parent() (Path, bool) {
 // If there is no colon in the path,
 // Split returns an empty path and a name set to the path.
 func (p Path) Split() (parent Path, name string) {
+	if strings.HasPrefix(p.value, "system:") {
+		return Path{p.value}, ""
+	}
 	i := strings.LastIndex(p.value, separator)
 	if i < 0 {
 		return Path{}, p.value
@@ -157,6 +160,11 @@ func (p *Path) UnmarshalJSON(data []byte) error {
 // HasPrefix tests whether the path begins with the other path.
 func (p Path) HasPrefix(other Path) bool {
 	return strings.HasPrefix(p.value, other.value)
+}
+
+// Equal checks if the path is the same as the other path.
+func (p Path) Equal(other Path) bool {
+	return p.value == other.value
 }
 
 const lclusterNameFmt string = "[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?"
