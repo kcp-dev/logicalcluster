@@ -68,7 +68,7 @@ type Object interface {
 }
 
 // AnnotationKey is the name of the annotation key used to denote an object's logical cluster.
-const AnnotationKey = "kcp.dev/cluster"
+const AnnotationKey = "kcp.io/cluster"
 
 // From returns the logical cluster name from the given object.
 func From(obj Object) Name {
