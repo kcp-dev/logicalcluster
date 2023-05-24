@@ -9,3 +9,14 @@ presubmits:
           command:
             - make
             - lint
+
+  - name: pull-logicalcluster-test
+    always_run: true
+    decorate: true
+    clone_uri: "ssh://git@github.com/kcp-dev/logicalcluster.git"
+    spec:
+      containers:
+        - image: quay.io/kubermatic/build:go-1.20-node-18-6
+          command:
+            - make
+            - test
