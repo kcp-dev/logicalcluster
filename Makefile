@@ -32,19 +32,19 @@ $(TOOLS_DIR)/verify_boilerplate.py:
 	chmod +x $(TOOLS_DIR)/verify_boilerplate.py
 
 .PHONY: verify-boilerplate
-verify-boilerplate: $(TOOLS_DIR)/verify_boilerplate.py
+verify-boilerplate: $(TOOLS_DIR)/verify_boilerplate.py ## Verify that all files have their proper boilerplate comments.
 	$(TOOLS_DIR)/verify_boilerplate.py --boilerplate-dir=hack/boilerplate
 
 .PHONY: verify-imports
-verify-imports:
+verify-imports: ## Ensure no forbidden Go import statements exist.
 	hack/reject-k8s-imports.sh
 
 .PHONY: lint
-lint: $(GOLANGCI_LINT)
+lint: $(GOLANGCI_LINT) ## Run golangci-lint.
 	$(GOLANGCI_LINT) run --timeout=10m ./...
 
 .PHONY: test
-test:
+test: ## Run Go unit tests.
 	go test ./...
 
 .PHONY: help
