@@ -159,7 +159,14 @@ func (p *Path) UnmarshalJSON(data []byte) error {
 
 // HasPrefix tests whether the path begins with the other path.
 func (p Path) HasPrefix(other Path) bool {
-	return strings.HasPrefix(p.value, other.value)
+	if p == other || other.Empty() {
+		return true
+	}
+	if strings.HasSuffix(other.String(), separator) {
+		// this is not a valid path, but we should have a defined behaviour
+		return strings.HasPrefix(p.value, other.value)
+	}
+	return strings.HasPrefix(p.value, other.value+separator)
 }
 
 // Equal checks if the path is the same as the other path.

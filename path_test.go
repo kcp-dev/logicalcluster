@@ -137,3 +137,28 @@ func TestPath_Name(t *testing.T) {
 		})
 	}
 }
+
+func TestPathHasPrefix(t *testing.T) {
+	tests := []struct {
+		name  string
+		path  Path
+		other Path
+		want  bool
+	}{
+		{"empty both", NewPath(""), NewPath(""), true},
+		{"empty other", NewPath("foo"), NewPath(""), true},
+		{"empty path", NewPath(""), NewPath("foo"), false},
+		{"equal", NewPath("foo"), NewPath("foo"), true},
+		{"prefix", NewPath("foo:bar"), NewPath("foo"), true},
+		{"string prefix only", NewPath("foooo:bar"), NewPath("foo"), false},
+		{"not prefix", NewPath("foo"), NewPath("foo:bar"), false},
+		{"other ending in :", NewPath("foo:bar"), NewPath("foo:"), true}, // "foo:" is not a valid path, but we should have a defined behaviour
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := tt.path.HasPrefix(tt.other); got != tt.want {
+				t.Errorf("HasPrefix() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
